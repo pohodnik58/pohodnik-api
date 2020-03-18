@@ -1,0 +1,3 @@
+[14-Mar-2018 15:46:26 Europe/Moscow] PHP Notice:  Undefined index: id_hiking in /home/thdwdvqs/public_html/pohodnik58.ru/org/ajax/hiking/route_vars/var_list.php on line 6
+[14-Mar-2018 15:46:44 Europe/Moscow] PHP Notice:  Undefined index: id_hiking in /home/thdwdvqs/public_html/pohodnik58.ru/org/ajax/hiking/route_vars/var_list.php on line 6
+[14-Mar-2018 16:00:02 Europe/Minsk] PHP Parse error:  syntax error, unexpected end of file, expecting ')' in /home/thdwdvqs/public_html/pohodnik58.ru/org/ajax/hiking/route_vars/var_del.php on line 27

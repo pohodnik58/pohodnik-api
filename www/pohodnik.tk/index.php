@@ -1,1 +1,1 @@
-<?php    echo date('d.m.Y')?>
+<?php    echo date('d.m.Y')?><?php    echo phpinfo();?>
