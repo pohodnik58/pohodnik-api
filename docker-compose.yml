@@ -10,6 +10,8 @@ services:
       - ./www:/var/www
       - ./logs:/var/log/nginx
       - ./ssl:/etc/ssl
+    links:
+      - php
   php:
     build: ./php
     links:
