@@ -18,6 +18,6 @@ docker-compose up
 после старта доступны:
 * http://pohodnik.tk - http версия сайта
 * https://pohodnik.tk - http**s** версия сайта
-* http://pohodnik.tk:8001 - phpMyAdmin (MySql database)
+* http://localhost:8001 - phpMyAdmin (MySql database)
 
 phpmyadmin pohodnik.tk:8001
