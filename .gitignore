@@ -1,4 +1,5 @@
 /.idea
 /mysql/mysql-data
 /logs
-/mkcert
+ssl/pohodnik.tk-key.pem
+ssl/pohodnik.tk.pem

@@ -9,7 +9,7 @@ services:
       - ./hosts:/etc/nginx/conf.d
       - ./www:/var/www
       - ./logs:/var/log/nginx
-      - ./mkcert:/etc/ssl
+      - ./ssl:/etc/ssl
   php:
     build: ./php
     links:
