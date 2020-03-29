@@ -1,5 +1,5 @@
 <?php
-require_once '../lib/SocialAuther/autoload.php';
+require_once '../ajax/lib/SocialAuther/autoload.php';
 
 $adapterConfigs = array(
     'vk' => array(
