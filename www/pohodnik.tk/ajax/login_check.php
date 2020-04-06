@@ -1,8 +1,8 @@
 <?php
-Header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); //Дата в прошлом 
-Header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1 
-Header("Pragma: no-cache"); // HTTP/1.1 
-Header("Last-Modified: ".gmdate("D, d M Y H:i:s")."GMT");
+    Header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); //Дата в прошлом
+    Header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
+    Header("Pragma: no-cache"); // HTTP/1.1
+    Header("Last-Modified: ".gmdate("D, d M Y H:i:s")."GMT");
 	ini_set('error_reporting', E_ALL);
 	ini_set('display_errors', 1);
 	ini_set('display_startup_errors', 1);
@@ -13,8 +13,12 @@ Header("Last-Modified: ".gmdate("D, d M Y H:i:s")."GMT");
 	}
 	
 	set_error_handler("ErrorCatcher");
-	$user = array();
+
 	include("../blocks/db.php"); //подключение к БД
+	include("../blocks/global.php"); //подключение к БД
+
+
+	$user = array();
 	$id		=	isset($_COOKIE["user"])?$_COOKIE["user"]:false;
 	$hash	=	isset($_COOKIE["hash"])?$_COOKIE["hash"]:false;
 	$result = false;
@@ -26,10 +30,12 @@ Header("Last-Modified: ".gmdate("D, d M Y H:i:s")."GMT");
 								WHERE 
 									user_hash.hash='{$hash}' AND users.id={$id} 
 								LIMIT 1");
-		if(!$q){die(json_encode(array("error"=>$mysqli->error, "result"=>false)));}
+		if(!$q){die(err(array("error"=>$mysqli->error, "result"=>false)));}
 		if($q && $q->num_rows===1){
 			$user = $q->fetch_assoc();
 			$result=true;
-		};
+		} else {
+		    die(err('Пользователь не найден'));
+		}
 	};
-	die(json_encode(array("result"=>$result, "user"=>$user)));
+	die(out(array("result"=>$result, "user"=>$user)));
