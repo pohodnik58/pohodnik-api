@@ -18,7 +18,7 @@
 	include("../blocks/global.php"); //подключение к БД
 
 
-	$user = array();
+	$user = null;
 	$id		=	isset($_COOKIE["user"])?$_COOKIE["user"]:false;
 	$hash	=	isset($_COOKIE["hash"])?$_COOKIE["hash"]:false;
 	$result = false;
