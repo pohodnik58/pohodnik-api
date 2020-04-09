@@ -19,7 +19,11 @@ if($q && $q->num_rows===1){
 			setcookie("hash", $hash, $timeout, "/");
 			setcookie("user", $res["id_user"], $timeout, "/");
 
-			echo(out(array("userId"=>$id_user)));
+			echo(out(array(
+			"userId"=>$id_user,
+			"hash"=> $hash
+			)));
+
 		} else {
 		    echo(err(array(
                 "message"=>"Ошибка авторизации",
