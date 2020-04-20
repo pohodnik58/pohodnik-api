@@ -12,6 +12,7 @@ IF %ERRORLEVEL% EQU 0 (
 
 echo start change hosts file
 echo %NEWLINE%^127.0.0.1 pohodnik.tk>>%WINDIR%\System32\drivers\etc\hosts
+echo %NEWLINE%^127.0.0.1 api.pohodnik.tk>>%WINDIR%\System32\drivers\etc\hosts
 color 0a
 echo hosts file changed successfuly
 @pause
