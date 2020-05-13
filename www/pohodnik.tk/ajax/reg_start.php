@@ -4,6 +4,7 @@ $name=		$mysqli->real_escape_string(trim($_POST["name"]));
 $surname=	$mysqli->real_escape_string(trim($_POST["surname"]));
 $login=		$mysqli->real_escape_string(trim(strtolower($_POST["login"])));
 $pass=		$mysqli->real_escape_string(trim($_POST["pass"]));
+$dob=		$mysqli->real_escape_string($_POST["dob"]);
 $hash  =	uniqid("poh").rand(100,999).'r';
 
 $q = $mysqli->query("SELECT id_user FROM user_login_variants WHERE login='{$login}' LIMIT 1");
@@ -11,7 +12,10 @@ if($q && $q->num_rows===1){exit(json_encode(array("error"=>"Пользовате
 }else if($mysqli->query("INSERT INTO users SET
 					`name`='{$name}',
 					`surname`='{$surname}',
-					`reg_date`=NOW()")){
+					`reg_date`=NOW(),
+					`dob`='{$dob}',
+					`ava`=''
+					")){
 	$id_user = $mysqli->insert_id;
 				
 					
