@@ -1,10 +1,23 @@
 <?php
-require_once 'AuthProviders.php';
+require_once '../ajax/lib/SocialAuther/autoload.php';
+include('../ajax/auth/adapters_config.php');
+include('../blocks/global.php');
 
-$adapters = AuthProviders::getInstance();
+if(!isset($_GET['provider'])) {
+    die(err("Не определен провайдер"));
+}
 
-if (isset($_GET['provider']) && array_key_exists($_GET['provider'], $adapters) /*&& !isset($_SESSION['user'])*/) {
-    $auther = new SocialAuther\SocialAuther($adapters[$_GET['provider']]);
+if(!array_key_exists($_GET['provider'],$adapterConfigs)) {
+    die(err("Не найден провайдер {$_GET['provider']}"));
+}
+
+
+if (isset($_GET['provider']) && array_key_exists($_GET['provider'], $adapterConfigs) /*&& !isset($_SESSION['user'])*/) {
+
+    $class = 'SocialAuther\Adapter\\' . ucfirst($_GET['provider']);
+    $adapter = new $class($adapterConfigs[$_GET['provider']]);
+
+    $auther = new SocialAuther\SocialAuther($adapter);
 
     if ($auther->authenticate()) {
 
@@ -20,12 +33,12 @@ if (isset($_GET['provider']) && array_key_exists($_GET['provider'], $adapters) /
                 date('Y-m-d', strtotime($auther->getBirthday())),
                 $auther->getAvatar()
             );
-			
+
 			echo implode('<li>',$values);
-			
+
 			print_r();
 
-   
+
         } else {
             $userFromDb = new stdClass();
             $userFromDb->provider   = $record['provider'];
@@ -68,48 +81,7 @@ if (isset($_GET['provider']) && array_key_exists($_GET['provider'], $adapters) /
 	}
 
     //header("location:index.php");
+} else {
+die(err('что-то пошло не так'));
 }
 ?>
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru">
-<head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
-    <title></title>
-	<style>svg { fill:#fff}
-	p {  display:inline-block; margin:6px; }
-	.social_box {
-		display:inline-block; height:40px; padding:8px 16px;fill:#fff;
-		line-height:40px!important;
-		color:#fff;
-		min-width:200px;
-		font-family: Arial;
-		font-size:18px;
-	}
-	
-	
-	.social_box img {
-		margin-left:15px;
-		float:right;
-		  transform: translateX(-9999px);
-			filter: drop-shadow(9999px 0 0 #fff);
-	}	
-	</style>
-</head>
-<body>
-
-<?php
-if (isset($_SESSION['user'])) {
-    echo '<p><a href="info.php">Скрытый контент</a></p>';
-} else if (!isset($_GET['code']) && !isset($_SESSION['user'])) {
-    foreach ($adapters as $title => $adapter) {
-        echo '<p><a href="' . $adapter->getAuthUrl() . '">' .  
-				'<span class="social_box" style="background:'.$adapter->getBG() . '">'.
-				$adapter->getFullName().'<img src="'.$adapter->getIcon().'" height=40></span></a></p>';
-    }
-}
-?>
-
-</body>
-</html>

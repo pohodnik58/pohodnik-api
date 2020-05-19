@@ -4,6 +4,10 @@ $user = getenv('MYSQL_USER');
 $psw = getenv('MYSQL_PASSWORD');
 $db = getenv('MYSQL_DATABASE');
 
+$host = empty($host) ? 'localhost' : $host;
+$user = empty($user) ? 'thdwdvqs_rukz' : $user;
+$psw = empty($psw)? 'rukzrukz' : $psw;
+$db = empty($db) ? 'thdwdvqs_rukz' : $db;
 
 $mysqli = new mysqli($host, $user, $psw, $db);
 if ($mysqli->connect_error) {

@@ -2,5 +2,7 @@
 /.idea
 /mysql/mysql-data
 /logs
+/tmp
+scrips/.env
 ssl/pohodnik.tk-key.pem
 ssl/pohodnik.tk.pem
