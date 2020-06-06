@@ -73,6 +73,7 @@ class Mailru extends AbstractAdapter
 
                 if (isset($userInfo[0]['uid'])) {
                     $this->userInfo = array_shift($userInfo);
+                    $this->userInfo['access_token'] = $tokenInfo['access_token'];
                     $result = true;
                 }
             }

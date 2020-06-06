@@ -102,6 +102,7 @@ class Vk extends AbstractAdapter
                 if (isset($userInfo['response'][0]['id'])) {
                     $this->userInfo = $userInfo['response'][0];
 					$this->userInfo['email'] = $tokenInfo['email'];
+					$this->userInfo['access_token'] = $tokenInfo['access_token'];
                     $result = true;
                 } else {
 					print_r( $tokenInfo );

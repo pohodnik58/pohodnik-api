@@ -52,6 +52,7 @@ class Yandex extends AbstractAdapter
 				print_r($userInfo);
                 if (isset($userInfo['id'])) {
                     $this->userInfo = $userInfo;
+                    $this->userInfo['access_token'] = $tokenInfo['access_token'];
                     $result = true;
                 }
             }

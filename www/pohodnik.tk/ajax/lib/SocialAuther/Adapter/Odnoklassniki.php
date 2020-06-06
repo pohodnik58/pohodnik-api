@@ -105,6 +105,7 @@ class Odnoklassniki extends AbstractAdapter
 
                 if (isset($userInfo['uid'])) {
                     $this->userInfo = $userInfo;
+                    $this->userInfo['access_token'] = $tokenInfo['access_token'];
                     $result = true;
                 }
             }

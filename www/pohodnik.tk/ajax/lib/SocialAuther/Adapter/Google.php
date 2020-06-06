@@ -64,6 +64,7 @@ class Google extends AbstractAdapter
                 $userInfo = $this->get('https://www.googleapis.com/oauth2/v1/userinfo', $params);
                 if (isset($userInfo[$this->socialFieldsMap['socialId']])) {
                     $this->userInfo = $userInfo;
+                    $this->userInfo['access_token'] = $tokenInfo['access_token'];
                     $result = true;
                 }
             }

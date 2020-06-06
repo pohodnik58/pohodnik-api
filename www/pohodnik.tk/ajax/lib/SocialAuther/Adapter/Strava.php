@@ -100,6 +100,7 @@ class Strava extends AbstractAdapter
 				
                 if (isset($userInfo['id'])) {
                     $this->userInfo = $userInfo;
+                    $this->userInfo['access_token'] = $tokenInfo['access_token'];
                     $result = true;
                 }
             } else {

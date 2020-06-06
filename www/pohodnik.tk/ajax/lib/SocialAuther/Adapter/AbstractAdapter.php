@@ -115,6 +115,17 @@ abstract class AbstractAdapter implements AdapterInterface
         return $result;
     }
 
+    public function getAccessToken()
+    {
+        $result = null;
+
+        if (isset($this->userInfo['access_token'])) {
+            $result = $this->userInfo['access_token'];
+        }
+
+        return $result;
+    }
+
     /**
      * Get user name or null if it is not set
      *
