@@ -29,7 +29,7 @@ $auther = new SocialAuther\SocialAuther($adapter);
         include('../blocks/db.php');
 
         $q = $mysqli->query("
-        SELECT id_user FROM user_login_variants 
+        SELECT id_user, email, social_id FROM user_login_variants 
         WHERE 
             (
                 social_id='{$auther->getSocialId()}' OR 
@@ -44,9 +44,14 @@ $auther = new SocialAuther\SocialAuther($adapter);
             $id_user = $res["id_user"];
             $idUser = $id_user;
             $access_token = $auther->getAccessToken();
-            if($mysqli->query("INSERT INTO `user_hash`
-            (`id_user`, `hash`, `date_start`) VALUES 
-            ({$id_user},'{$access_token}',NOW())")){
+
+            if(
+                $mysqli->query("
+                INSERT INTO `user_hash`
+                (`id_user`, `hash`, `date_start`) VALUES 
+                ({$id_user},'{$access_token}',NOW())
+            ")
+            ){
                 setcookie("hash", $access_token, time()+86400*7,"/");
                 setcookie("user", $id_user,time()+86400*7,"/");
             }

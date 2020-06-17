@@ -51,7 +51,8 @@ class Google extends AbstractAdapter
                 'client_secret' => $this->clientSecret,
                 'redirect_uri'  => $this->redirectUri,
                 'grant_type'    => 'authorization_code',
-                'code'          => $_GET['code']
+                'code'          => $_GET['code'],
+                'scope' => 'https://www.googleapis.com/auth/userinfo.email'
             );
 
             $tokenInfo = $this->post('https://accounts.google.com/o/oauth2/token', $params);
