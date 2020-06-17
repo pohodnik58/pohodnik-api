@@ -12,20 +12,6 @@
 
     if(isset($_COOKIE["hash"]) && isset($_GET['token']) && $_COOKIE["hash"] == $_GET['token']){
         $res = array();
-        $q = $mysqli->query("
-        SELECT
-            ulv.id_user, ulv.provider, ulv.email, ulv.network,
-            users.name, users.surname, users.photo_50
-        FROM
-            user_login_variants as ulv LEFT JOIN users ON users.id = ulv.id_user 
-        WHERE
-            ulv.email='{$email}' OR ulv.social_id='{$socialId}'
-        ");
-
-        
-        while($r = $q->fetch_assoc()){
-            $res[] = $r;
-        }
 
         $q = $mysqli->query("
         SELECT
@@ -33,7 +19,10 @@
             users.name, users.surname, users.photo_50
         FROM
             user_login_variants as ulv LEFT JOIN users ON users.id = ulv.id_user 
-        WHERE users.email='{$email}' OR ulv.social_id='{$socialId}'
+        WHERE 
+            (LENGTH(users.email) > 0 AND users.email='{$email}') 
+            OR (LENGTH(ulv.login) > 0 AND ulv.login='{$email}')
+            OR ulv.social_id='{$socialId}'
         ");
 
         while($r = $q->fetch_assoc()){

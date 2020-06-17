@@ -52,18 +52,19 @@ class Facebook extends AbstractAdapter
                 'client_secret' => $this->clientSecret,
                 'code'          => $_GET['code']
             );
-			$tokenInfo = json_decode($this->get('https://graph.facebook.com/oauth/access_token', $params, false), true);
+			$tokenInfo = json_decode($this->get('https://graph.facebook.com/v7.0/oauth/access_token', $params, false), true);
            
-		   			echo '<pre>';
-			print_r($tokenInfo);
-			echo '</pre>';
+
 		   
             if (count($tokenInfo) > 0 && isset($tokenInfo['access_token'])) {
                 $params = array(
 					'access_token' => $tokenInfo['access_token'], 
 					'fields'=> 'id,birthday,email,first_name,gender,last_name,link,picture.width(999999).as(picture_large),picture,middle_name,name'
-				);
+                );
+                
+
                 $userInfo = $this->get('https://graph.facebook.com/v2.6/me', $params);
+
 
                 if (isset($userInfo['id'])) {
                     $this->userInfo = $userInfo;
@@ -85,7 +86,7 @@ class Facebook extends AbstractAdapter
     public function prepareAuthParams()
     {
         return array(
-            'auth_url'    => 'https://www.facebook.com/dialog/oauth',
+            'auth_url'    => 'https://www.facebook.com/v7.0/dialog/oauth',
             'auth_params' => array(
                 'client_id'     => $this->clientId,
                 'redirect_uri'  => $this->redirectUri,

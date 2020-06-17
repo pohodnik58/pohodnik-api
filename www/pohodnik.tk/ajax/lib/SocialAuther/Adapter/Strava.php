@@ -85,9 +85,6 @@ class Strava extends AbstractAdapter
             );
 
             $tokenInfo = $this->post('https://www.strava.com/oauth/token', $params);
-					echo '<pre>';
-			print_r($tokenInfo);
-			echo '</pre>';
 			
             if (isset($tokenInfo['access_token'])) {
                $params = array(
@@ -124,7 +121,7 @@ class Strava extends AbstractAdapter
             'auth_url'    => 'https://www.strava.com/oauth/authorize',
             'auth_params' => array(
                 'client_id'     => $this->clientId,
-                'scope'         => 'public',
+                'scope'         => 'profile:read_all',
                 'redirect_uri'  => $this->redirectUri,
                 'response_type' => 'code',
 				'state'=>'ok'
