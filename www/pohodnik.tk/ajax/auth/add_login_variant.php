@@ -5,14 +5,16 @@
 
     $avatar = isset($_POST['avatar']) ? $_POST['avatar']: null;
     $birthday = isset($_POST['birthday']) && !empty($_POST['birthday']) ? date_parse_from_format("d.m.Y", $_POST['birthday']): null;
-    $email = isset($_POST['email']) ? $_POST['email']: null;
+    $email = isset($_POST['email']) && !empty($_POST['email']) && $_POST['email'] != 'null'
+                ? $mysqli->real_escape_string($_POST['email'])
+                : null;
     $name = isset($_POST['name']) ? $_POST['name']: null;
     $provider = isset($_POST['provider']) ? $_POST['provider']: null;
     $sex = isset($_POST['sex']) ? $_POST['sex']: null;
     $socialId = isset($_POST['socialId']) ? $_POST['socialId']: null;
     $socialPage = isset($_POST['socialPage']) ? $_POST['socialPage']: null;
-    $updateEmail = isset($_POST['updateEmail']) ? $_POST['updateEmail']: null;
-    $updateAva = isset($_POST['updateAva']) ? $_POST['updateAva']: null;
+    $updateEmail = isset($_POST['updateEmail']) ? $_POST['updateEmail'] == 'true' : false;
+    $updateAva = isset($_POST['updateAva']) ? $_POST['updateAva'] == 'true': false;
     $uid = intval($_COOKIE["user"]);
 
     $q = $mysqli->query("SELECT 
@@ -29,7 +31,7 @@ if($updateEmail && !empty($email)){
     $patch['email'] = $email;
 }
 
-if($updateAva && !empty($avatar)){
+if($updateAva  && !empty($avatar)){
     $patch['photo_50'] = $avatar;
     $patch['photo_50'] = $avatar;
     $patch['photo_100'] = $avatar;
@@ -47,16 +49,27 @@ if(empty($r['dob']) && !empty($birthday)) {
     $patch['dob'] = date('Y-m-d', $birthday);
 }
 
+$varFields = array(
+    "`id_user`={$uid}",
+    "`social_id`='{$socialId}'",
+    "`email`='{$email}'",
+    "`provider`='{$provider}'",
+    "`network`='{$provider}'"
+);
 
-$q = $mysqli->query("
-    INSERT INTO `user_login_variants` SET 
-    `id_user`={$uid},
-    `social_id`='{$socialId}',
-    `email`='{$email}',
-    `provider`='{$provider}',
-    `network`='{$provider}',
-    `social_page`=".(!empty($socialPage) && strtolower($socialPage)!='null'?"'{$socialPage}'":'NULL')."
-");
+$q = $mysqli->query("SELECT id FROM `user_login_variants` WHERE ".implode(" AND ", $varFields)." LIMIT 1");
+
+if(!$q) {
+    die(err($mysqli->error));
+}
+
+if($q->num_rows == 1) {
+    die(err("Такой вариант входа уже добавлен"));
+}
+$varFields[] = "`social_page`=".(!empty($socialPage) && strtolower($socialPage)!='null'?"'{$socialPage}'":'NULL')."";
+
+
+$q = $mysqli->query("INSERT INTO `user_login_variants` SET ".implode(", ", $varFields));
 
 if(!$q) {
     die(err($mysqli->error));
