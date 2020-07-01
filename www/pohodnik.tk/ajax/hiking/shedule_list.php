@@ -22,7 +22,10 @@ $q = $mysqli->query("SELECT
 		hiking_schedule.id_route_object,
 		hiking_schedule.kkal,
 		route_objects.name AS name_routeobject,
-		food_acts.name AS name_food_act
+		route_objects.distance AS routeobject_distance,
+		route_objects.`desc` AS routeobject_description,
+		food_acts.name AS name_food_act,
+		food_acts.norm_kkal AS food_act_norm_kkal
 	FROM `hiking_schedule` 
 		LEFT JOIN food_acts ON food_acts.id=hiking_schedule.id_food_act
 		LEFT JOIN route_objects ON route_objects.id=hiking_schedule.id_route_object
