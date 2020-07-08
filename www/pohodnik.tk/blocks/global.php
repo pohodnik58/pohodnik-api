@@ -1,5 +1,5 @@
 <?php
-function err($err, $data) {
+function err($err, $data=array()) {
     return json_encode(array(
         "error" => $err,
         "message" => is_string($err)
@@ -9,7 +9,7 @@ function err($err, $data) {
                 ? $err['message']
                 : 'Что-то пошло не так ...'
             ),
-            "data" => isset($data) ? $data : array()
+            "error_data" => isset($data) ? $data : array()
     ));
 }
 
