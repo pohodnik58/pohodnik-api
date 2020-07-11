@@ -26,7 +26,8 @@
 		if(isset($_POST['sizes'])){
 			if(is_array($_POST['sizes'])){$sizes = $_POST['sizes'];} else { $sizes = explode(",", $_POST['sizes']);}
 			if(count($sizes)>0){
-				 
+				list($width, $height) = getimagesize('../'.$folder.$fileName);
+				$coeff = $width / $height;
 				require_once('lib/php-image-magician/php_image_magician.php');
 				foreach ( $sizes as $size) {
 					if(strpos($size,"/")>0){
@@ -36,7 +37,7 @@
 
 					} else {
 						$width = intval($size);
-						$height = intval($size);
+						$height = intval($size) / $coeff;
 					}
 					$magicianObj = new imageLib('../'.$folder.$fileName);
 					$magicianObj -> resizeImage($width, $height, 'crop');

@@ -6,7 +6,7 @@
 
 	$id = intval($_POST['id']);
 	
-	$q=$mysqli->query("SELECT `name`,`date`,`id_user`,`id_hiking`,`img_600`,`img_100` FROM `hiking_finance_receipt` WHERE id=".$id." AND id_user=".$id_user."");
+	$q=$mysqli->query("SELECT `name`,`date`,`id_user`,`id_hiking`,`img_600`,`img_100`,`img_orig` FROM `hiking_finance_receipt` WHERE id=".$id." AND id_user=".$id_user."");
 	if(!$q || $q->num_rows===0){exit(json_encode(array("error"=>"Ошибка\r\n".$mysqli->error)));}
 	$r = $q->fetch_assoc();
 
@@ -17,6 +17,7 @@
 	
 	unlink('../../../'.$r['img_600']);
 	unlink('../../../'.$r['img_100']);
+	unlink('../../../'.$r['img_orig']);
 
 	$q=$mysqli->query("DELETE FROM `hiking_finance_receipt` WHERE id=".$id." AND id_user=".$id_user."");
 	if(!$q){exit(json_encode(array("error"=>"Ошибка\r\n".$mysqli->error)));}
