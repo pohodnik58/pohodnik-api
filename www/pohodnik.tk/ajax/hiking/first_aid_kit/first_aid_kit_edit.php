@@ -5,13 +5,11 @@ include("../../../blocks/err.php");
 include("../../../blocks/global.php");
 
 $id_user = $_COOKIE["user"];
+$id = isset($_POST['id'])?intval($_POST['id']):0;
 $id_hiking = isset($_POST['id_hiking'])?intval($_POST['id_hiking']):0;
-$id_medicament = isset($_POST['id_medicament'])?intval($_POST['id_medicament']):0;
-$amount = isset($_POST['amount'])?intval($_POST['amount']):0;
-$comment = isset($_POST['comment'])?$mysqli->real_escape_string($_POST['comment']):"";
 
+if(!($id>0)){die(err("id is undefined"));}
 if(!($id_hiking>0)){die(err("id_hiking is undefined"));}
-if(!($amount>0)){die(err("Укажите количество препата в аптечке"));}
 
 $q = $mysqli->query("SELECT id FROM hiking WHERE id={$id_hiking} AND id_author = {$id_user} LIMIT 1");
 if($q && $q->num_rows===0){
@@ -21,12 +19,23 @@ if($q && $q->num_rows===0){
 	}
 }
 
-$z = "INSERT INTO `hiking_first_and_kit`(`id_hiking`, `id_medicament`, `amount`, `id_author`, comment) VALUES ({$id_hiking},{id_medicament},{amount},{id_author},'{$comment}')";
+$patch = array();
+if (isset($_POST['comment'])) {
+    $patch[] = "`comment`='".$mysqli->real_escape_string($_POST['comment'])."'";
+}
+
+if (isset($_POST['amount'])) {
+    $patch[] = "`amount`=".intval($_POST['amount'])."";
+}
+
+if(!(count($patch)>0)){die(err("no changes"));}
+
+
+$z = "UPDATE `hiking_first_aid_kit` SET ".implode(",", $patch)." WHERE `id`={$id}";
 $q = $mysqli->query($z);
-if(!$q) { die(err($mysqli->error, array("z" => $z)));}
+if(!$q) { die(err($mysqli->error, array("z" => $z, "patch" => $patch)));}
 
 die(out(array(
     "success" => true,
-    "affected" => $mysqli->affected_rows,
-    "id" => $mysqli->insert_id
+    "affected" => $mysqli->affected_rows
 )));

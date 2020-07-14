@@ -19,7 +19,7 @@ if($q && $q->num_rows===0){
 	}
 }
 
-$z = "DELETE FROM `hiking_first_and_kit` WHERE `id`={$id}";
+$z = "DELETE FROM `hiking_first_aid_kit` WHERE `id`={$id}";
 $q = $mysqli->query($z);
 if(!$q) { die(err($mysqli->error, array("z" => $z, "patch" => $patch)));}
 

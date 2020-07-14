@@ -16,7 +16,7 @@ if(strlen($name)<3){die(err("Название препарата не корре
 if(strlen($dosage)<3){die(err("Введите рекомендуемую дозировку препарата"));}
 if(strlen($for_use)<5){die(err("Введите показания к применению"));}
 
-$z = "INSERT INTO `medicaments`( `name`, `medical_group`, `form`, `dosage`, `for_use`, `contraindications`) VALUES ('{$name}','{$medical_group}','{$form}','{$dosage}','{$for_use}','{$contraindications})')";
+$z = "INSERT INTO `medicaments`( `name`, `medical_group`, `form`, `dosage`, `for_use`, `contraindications`) VALUES ('{$name}','{$medical_group}','{$form}','{$dosage}','{$for_use}','{$contraindications}')";
 $q = $mysqli->query($z);
 if(!$q) { die(err($mysqli->error, array("z" => $z)));}
 
