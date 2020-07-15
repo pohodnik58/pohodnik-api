@@ -80,16 +80,46 @@ if($q){
 		$r["hikers"] = array();
 		$r["is_i_hiker"] = false;
 	
-		$qi = $mysqli->query("SELECT  hiking_members.id_user, UNIX_TIMESTAMP(hiking_members.date) AS date , users.name, users.surname,  users.vk_id, users.photo_50, users.photo_100, users.sex
-								FROM hiking_members LEFT JOIN users ON hiking_members.id_user = users.id
-								WHERE hiking_members.id_hiking={$id} ORDER BY hiking_members.date");
+		$qi = $mysqli->query("SELECT
+			hiking_members.id_user, UNIX_TIMESTAMP(hiking_members.date) AS date ,
+			users.name, users.surname, 
+			users.vk_id,
+			users.photo_50, users.photo_100, users.sex
+		FROM hiking_members LEFT JOIN users ON hiking_members.id_user = users.id
+		WHERE hiking_members.id_hiking={$id} ORDER BY hiking_members.date");
 								
 			while($ri = $qi->fetch_assoc()){
 				$r["hikers"][] = $ri;
 				if($ri['id_user']==$id_user){ $r["is_i_hiker"]=true;}
 			}
 		
-		
+
+			$qi = $mysqli->query("SELECT
+			positions.name,
+			positions.description,
+			hiking_vacancies.id_position,
+			hiking_vacancies.comment,
+			hiking_vacancies_response.date,
+			hiking_vacancies_response.approve_date,
+			hiking_vacancies_response.id_user,
+			CONCAT(users.name,' ', users.surname) as approver
+		FROM hiking_vacancies_response
+		LEFT JOIN hiking_vacancies ON hiking_vacancies.id = hiking_vacancies_response.id_hiking_vacancy
+		LEFT JOIN positions ON positions.id = hiking_vacancies.id_position
+		LEFT JOIN users ON users.id = hiking_vacancies_response.approve_user_id
+		WHERE hiking_vacancies.id_hiking={$id} AND hiking_vacancies_response.approve_user_id IS NOT NULL");
+				if(!$qi){die($mysqli->error);}				
+			while($ri = $qi->fetch_assoc()){
+				for($i = 0; $i<count($r["hikers"]); $i++ ){
+					if(!isset($r["hikers"][$i]['positions'])) {
+						$r["hikers"][$i]['positions'] = array();
+					}
+					if($ri['id_user'] == $r["hikers"][$i]['id_user']) {
+						$r["hikers"][$i]['positions'][] = $ri;
+					}
+				}
+			}
+
 		
 		$r['start_date_rus'] = smartDate($r['start']);
 		$r['finish_date_rus'] = smartDate($r['finish']);

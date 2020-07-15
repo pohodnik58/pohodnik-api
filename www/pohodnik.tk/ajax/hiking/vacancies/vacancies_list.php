@@ -10,13 +10,19 @@ $id_hiking = isset($_GET['id_hiking'])?intval($_GET['id_hiking']):0;
 if(!($id_hiking>0)){die(err("id_hiking is undefined"));}
 
 $z = "SELECT
-        positions.*,
-        hiking_vacancies.*
+        positions.name,
+        positions.description,
+        hiking_vacancies.id AS id_vacancy,
+        hiking_vacancies.*,
+        COUNT(hiking_vacancies_response.id) AS responses
       FROM
         hiking_vacancies
         LEFT JOIN positions ON positions.id = hiking_vacancies.id_position
+        LEFT JOIN hiking_vacancies_response ON hiking_vacancies_response.id_hiking_vacancy = hiking_vacancies.id
       WHERE
-        hiking_vacancies.id_hiking={$id_hiking} ".(!isset($_GET['all']) ? " AND hiking_vacancies.is_active=1 AND hiking_vacancies.deadline<=NOW()" : "")."";
+        hiking_vacancies.id_hiking={$id_hiking} ".(!isset($_GET['all']) ? " AND hiking_vacancies.is_active=1 AND hiking_vacancies.deadline>=NOW()" : "")."
+        GROUP BY hiking_vacancies.id
+        ";
 $q = $mysqli->query($z);
 if(!$q) { die(err($mysqli->error, array("z" => $z)));}
 
