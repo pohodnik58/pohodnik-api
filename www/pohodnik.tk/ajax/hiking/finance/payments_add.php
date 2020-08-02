@@ -19,14 +19,14 @@ if($id_user != $id_author){
 
 
 $summ = floatval($_POST['summ']);
-$summ = isset($_POST['comment']) && !empty($_POST['comment'])
+$comment = isset($_POST['comment']) && !empty($_POST['comment'])
 		? $mysqli->real_escape_string($_POST['comment'])
 		: "";
 $date = isset($_POST['date']) && !empty($_POST['date'])
 		? $mysqli->real_escape_string($_POST['date'])
 		: date("Y-m-d");		
 
-$q=$mysqli->query("INSERT INTO `hiking_finance_payment` SET `comment`='{$comment}', `date`={$date},`id_user`={$id_user},`id_author`={$id_author},`id_hiking`={$id_hiking}, date_create=NOW(), total={$summ}");
+$q=$mysqli->query("INSERT INTO `hiking_finance_payment` SET `comment`='{$comment}', `date`='{$date}',`id_user`={$id_user},`id_author`={$id_author},`id_hiking`={$id_hiking}, date_create=NOW(), total={$summ}");
 if(!$q){exit(json_encode(array("error"=>"Ошибка\r\n".$mysqli->error)));}
 if($q){
 	exit(json_encode(array(
