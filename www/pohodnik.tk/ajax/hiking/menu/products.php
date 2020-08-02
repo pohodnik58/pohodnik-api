@@ -27,11 +27,20 @@ GROUP_CONCAT(
 
 0 AS is_optimize,
 (SELECT GROUP_CONCAT(CONCAT(weight,'|',value,'|', cost)) 
-FROM recipes_products_units_values WHERE id_product=recipes_products.id GROUP BY recipes_products_units_values.id_product) AS cost
+FROM recipes_products_units_values WHERE id_product=recipes_products.id GROUP BY recipes_products_units_values.id_product) AS cost,
+hiking_menu_products_force.id AS id_force,
+CONCAT(forceUser.name,' ',forceUser.surname) AS forceUserName
+
 FROM hiking_menu
 LEFT JOIN recipes ON recipes.id = hiking_menu.id_recipe 
 LEFT JOIN recipes_structure ON recipes_structure.id_recipe = recipes.id
 LEFT JOIN recipes_products ON  recipes_structure.id_product = recipes_products.id
+LEFT JOIN hiking_menu_products_force ON (
+	hiking_menu_products_force.id_product = recipes_products.id
+	AND hiking_menu_products_force.id_hiking={$id_hiking})
+LEFT JOIN users AS forceUser ON  hiking_menu_products_force.id_user = forceUser.id
+
+
 WHERE hiking_menu.id_hiking={$id_hiking} ".$addwhere." GROUP BY id_product");//
 if(!$q){die(json_encode(array("error"=>$mysqli->error)));}
 while($r = $q->fetch_assoc()){
