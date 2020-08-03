@@ -20,7 +20,29 @@
 	}
 
 	$res = array();
-	$q = $mysqli->query("SELECT hiking_finance_receipt.*, UNIX_TIMESTAMP(hiking_finance_receipt.date)  AS uts, (hiking_finance_receipt.id_user={$id_user}) AS my, users.name AS uname, users.surname as usurname, SUM(hiking_finance.cost * hiking_finance.amount) AS cursumm FROM `hiking_finance_receipt` LEFT JOIN users ON hiking_finance_receipt.id_user = users.id LEFT JOIN hiking_finance ON hiking_finance.id_receipt = hiking_finance_receipt.id  WHERE 1 {$addwhere} GROUP BY hiking_finance_receipt.id ORDER BY my, date");
+	$q = $mysqli->query("SELECT
+		hiking_finance_receipt.*,
+		UNIX_TIMESTAMP(hiking_finance_receipt.date)  AS uts,
+		(hiking_finance_receipt.id_user={$id_user}) AS my,
+		users.name AS uname,
+		users.surname as usurname,
+		SUM(hiking_finance.cost * hiking_finance.amount) AS cursumm,
+		GROUP_CONCAT(
+			CONCAT(
+				hfrp.id_user, '|', who.name, ' ', who.surname, '|', hfrp.date_create
+			)
+		) AS participation
+	FROM
+		`hiking_finance_receipt`
+		LEFT JOIN users ON hiking_finance_receipt.id_user = users.id
+		LEFT JOIN hiking_finance ON hiking_finance.id_receipt = hiking_finance_receipt.id
+		LEFT JOIN hiking_finance_receipt_participation AS hfrp ON hfrp.id_hiking_receipt = hiking_finance_receipt.id
+		LEFT JOIN users as who ON hfrp.id_user = who.id
+	WHERE 1 {$addwhere}
+	GROUP BY hiking_finance_receipt.id
+	ORDER BY my, date
+	");
+
 	if(!$q ){exit(json_encode(array("error"=>"Ошибка\r\n".$mysqli->error)));}
 	while($r = $q->fetch_assoc()){
 		$r['date_rus'] = date('d.m.Y в H:i',$r['uts']-3600);
